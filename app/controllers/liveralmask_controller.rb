@@ -1,0 +1,2 @@
+class LiveralmaskController < ApplicationController
+end
