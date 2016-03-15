@@ -1,0 +1,2 @@
+module InforestGardenHelper
+end
