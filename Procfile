@@ -1,1 +1,1 @@
-gem 'rails_12factor', group: :production
+web: bundle exec rails server -p $PORT
