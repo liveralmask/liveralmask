@@ -27,14 +27,14 @@ class UrlController < ApiController
       }
       
       results = {}
-      document = Owrb::HTML.parse( @browser.html )
+      document = @browser.document
       response_orders.each{|order|
         key = order.shift
         case order.shift
         when "xpath"
           elements = []
           document.xpath( *order ).each{|element|
-            elements.push element
+            elements.push element.to_h
           }
           results[ key ] = elements
         when "html"

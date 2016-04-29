@@ -79,7 +79,7 @@ GEM
     multi_json (1.11.3)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    owrb (0.0.2)
+    owrb (0.0.3)
       nokogiri
       watir
     pg (0.18.4)
