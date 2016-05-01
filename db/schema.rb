@@ -11,30 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313125553) do
+ActiveRecord::Schema.define(version: 20160430191851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
-    t.integer  "provider_account_id"
-    t.string   "login_key"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
-
-  add_index "accounts", ["provider_account_id"], name: "index_accounts_on_provider_account_id", unique: true, using: :btree
 
   create_table "provider_accounts", force: :cascade do |t|
-    t.string   "uid"
-    t.string   "name"
-    t.string   "icon"
-    t.text     "access_token"
-    t.integer  "account_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.string   "uid",          null: false
+    t.text     "info",         null: false
+    t.text     "access_token", null: false
+    t.integer  "account_id",   null: false
+    t.string   "login_key",    null: false
   end
 
+  add_index "provider_accounts", ["account_id"], name: "index_provider_accounts_on_account_id", using: :btree
+  add_index "provider_accounts", ["login_key"], name: "index_provider_accounts_on_login_key", unique: true, using: :btree
   add_index "provider_accounts", ["uid"], name: "index_provider_accounts_on_uid", unique: true, using: :btree
 
 end
