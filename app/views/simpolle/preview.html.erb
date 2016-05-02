@@ -1,0 +1,22 @@
+<div class="center">
+  <%= form_tag( "/simpolle/create", :method => :post ) do %>
+    <%= hidden_field_tag( :question, Owrb::JSON.encode( @question ) ) %>
+    
+    <div class="center">
+      <%= button_tag( "編集する", :name => :edit, :style => "width: 100%; height: 30px; padding: 5px; margin: 10px 0", :class => "button_black" ) %>
+    </div>
+    
+    <%= text_area_tag( "", @question[ "title" ], :style => "width: 100%; resize: none; text-align: center; border: 0" ) %>
+    
+    <% @question[ "choices" ].each{|i, text| %>
+      <% next if text.empty? %>
+      
+      <%= button_tag( text, :type => :button, :style => "width: 80%; height: 30px; padding: 5px; margin: 10px 0", :class => "button_blue" ) %>
+    <% } %>
+    
+    <div class="center">
+      <%= button_tag( "作成する", :name => :create, :style => "width: 100%; height: 30px; padding: 5px; margin: 10px 0", :class => "button_black" ) %>
+    </div>
+    
+  <% end %>
+</div>

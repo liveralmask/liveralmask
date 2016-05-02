@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160430191851) do
+ActiveRecord::Schema.define(version: 20160501124443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,5 +34,26 @@ ActiveRecord::Schema.define(version: 20160430191851) do
   add_index "provider_accounts", ["account_id"], name: "index_provider_accounts_on_account_id", using: :btree
   add_index "provider_accounts", ["login_key"], name: "index_provider_accounts_on_login_key", unique: true, using: :btree
   add_index "provider_accounts", ["uid"], name: "index_provider_accounts_on_uid", unique: true, using: :btree
+
+  create_table "simpolle_question_choices", force: :cascade do |t|
+    t.integer  "simpolle_question_id", null: false
+    t.integer  "account_id",           null: false
+    t.integer  "choice",               null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "simpolle_question_choices", ["account_id"], name: "index_simpolle_question_choices_on_account_id", using: :btree
+  add_index "simpolle_question_choices", ["simpolle_question_id"], name: "index_simpolle_question_choices_on_simpolle_question_id", using: :btree
+
+  create_table "simpolle_questions", force: :cascade do |t|
+    t.text     "question",   null: false
+    t.text     "result",     null: false
+    t.integer  "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "simpolle_questions", ["account_id"], name: "index_simpolle_questions_on_account_id", using: :btree
 
 end

@@ -10,8 +10,8 @@ class AccountController < ApplicationController
     provider = auth[ "provider" ]
     uid = auth[ "uid" ]
     info = {
-      :icon     => auth[ "info" ][ "image" ],
-      :name     => {
+      :icon => auth[ "info" ][ "image" ],
+      :name => {
         :user    => auth[ "info" ][ "nickname" ],
         :display => auth[ "info" ][ "name" ],
       }

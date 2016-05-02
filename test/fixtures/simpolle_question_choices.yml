@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  simpolle_question_id: 1
+  account_id: 1
+  choice: 1
+
+two:
+  simpolle_question_id: 1
+  account_id: 1
+  choice: 1
