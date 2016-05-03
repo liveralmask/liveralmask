@@ -14,11 +14,14 @@ protected
   def before_action
     @title = ""
     @dst_url = param( "dst_url", "/" )
-    @user_agent = Owrb::UserAgent.new( request.env[ "HTTP_USER_AGENT" ] )
     
     login_key = cookie.get( :login_key, "" )
     @provider_account = ProviderAccount.find_by( login_key: login_key )
     check_login_account
+    
+    @style = Owrb::HTML::Style
+    @stylesheets = stylesheets
+    @javascripts = javascripts
   end
   
   def after_action
@@ -27,7 +30,7 @@ protected
   def check_login_account
     redirect_to "/account?dst_url=#{Owrb::URL.encode( request.original_url )}" if @provider_account.nil?
     
-    Rails.logger.info "[#{Owrb::Time.new}] #{@user_agent} #{request.original_url}"
+    Rails.logger.info "[#{Owrb::Time.new}] #{request.original_url}"
   end
   
   def param( key, default_value )
@@ -78,5 +81,71 @@ protected
   
   def error( err )
     render :json => { :errmsg => err.message }
+  end
+  
+  def stylesheet( name, styles )
+    @style.css( name, styles )
+  end
+  
+  def stylesheets
+    contents = [
+      stylesheet( ".button_black", [
+        @style.border({ :border => "1px solid #616261", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#7d7e7d", "#0e0e0e" ] } }),
+        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
+        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
+        [ "margin: 10px 0" ]
+      ]),
+      stylesheet( ".button_black:hover", [
+        @style.border({ :border => "1px solid #4a4b4" }),
+        @style.background({ :linear_gradient => { :color => [ "#646464", "#282828" ] } }),
+      ]),
+      stylesheet( ".button_blue", [
+        @style.border({ :border => "1px solid #15aeec", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#2CAFE3" ] } }),
+        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
+        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
+        [ "margin: 10px 0" ]
+      ]),
+      stylesheet( ".button_blue:hover", [
+        @style.border({ :border => "1px solid #1090c3" }),
+        @style.background({ :linear_gradient => { :color => [ "#1ab0ec", "#1a92c2" ] } }),
+      ]),
+      stylesheet( ".button_green", [
+        @style.border({ :border => "1px solid #34740e", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#4ba614", "#008c00" ] } }),
+        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
+        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
+        [ "margin: 10px 0" ]
+      ]),
+      stylesheet( ".button_green:hover", [
+        @style.border({ :border => "1px solid #224b09" }),
+        @style.background({ :linear_gradient => { :color => [ "#36780f", "#005900" ] } }),
+      ])
+    ]
+    
+    [{
+      :content => contents.join( "\n" ),
+    }]
+  end
+  
+  def javascripts
+    [{
+      :content => <<EOS
+var global = {};
+
+$(function(){
+  opjs.document.set( document );
+  global.element = opjs.document.element;
+  
+  var width = screen.width;
+  if ( 640 < width ) width = 640;
+  global.content = {
+    "width":  width,
+    "height": screen.height,
+  };
+})
+EOS
+    }]
   end
 end

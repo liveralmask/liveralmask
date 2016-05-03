@@ -3,12 +3,24 @@
 <head>
   <title><%= @title %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <% @stylesheets.each{|stylesheet| %>
+    <% if stylesheet.key?( :content ) %>
+  <style type="text/css">
+<%= stylesheet[ :content ].html_safe %>
+  </style>
+    <% end %>
+  <% } %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <% @javascripts.each{|javascript| %>
+    <% if javascript.key?( :content ) %>
+  <script type="text/javascript">
+<%= javascript[ :content ].html_safe %>
+  </script>
+    <% end %>
+  <% } %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
 <%= yield %>
-
 </body>
 </html>

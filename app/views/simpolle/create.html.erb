@@ -1,14 +1,12 @@
 <div class="center">
   <%= form_tag( "/simpolle/preview", :method => :post ) do %>
-    <%= text_area_tag( "question[title]", @question[ "title" ], :style => "width: 100%; resize:none", :size => "x3", :placeholder => "質問内容" ) %><br>
-    <%= text_field_tag( "question[choices][0]", @question[ "choices" ][ "0" ], :style => "width: 100%", :placeholder => "選択肢1" ) %>
-    <%= text_field_tag( "question[choices][1]", @question[ "choices" ][ "1" ], :style => "width: 100%", :placeholder => "選択肢2" ) %>
-    <%= text_field_tag( "question[choices][2]", @question[ "choices" ][ "2" ], :style => "width: 100%", :placeholder => "選択肢3" ) %>
-    <%= text_field_tag( "question[choices][3]", @question[ "choices" ][ "3" ], :style => "width: 100%", :placeholder => "選択肢4" ) %>
-    <%= text_field_tag( "question[choices][4]", @question[ "choices" ][ "4" ], :style => "width: 100%", :placeholder => "選択肢5" ) %>
+    <%= text_area_tag( "question[title]", @question[ "title" ], :class => "question_title", :size => "x3", :placeholder => "質問内容" ) %><br>
+    <%= text_field_tag( "question[choices][0]", @question[ "choices" ][ "0" ], :class => "question_choice", :placeholder => "選択肢1" ) %>
+    <%= text_field_tag( "question[choices][1]", @question[ "choices" ][ "1" ], :class => "question_choice", :placeholder => "選択肢2" ) %>
+    <%= text_field_tag( "question[choices][2]", @question[ "choices" ][ "2" ], :class => "question_choice", :placeholder => "選択肢3" ) %>
+    <%= text_field_tag( "question[choices][3]", @question[ "choices" ][ "3" ], :class => "question_choice", :placeholder => "選択肢4" ) %>
+    <%= text_field_tag( "question[choices][4]", @question[ "choices" ][ "4" ], :class => "question_choice", :placeholder => "選択肢5" ) %>
     
-    <div class="center">
-      <%= button_tag( "プレビュー", :style => "width: 100%; height: 30px; padding: 5px; margin: 10px 0", :class => "button_black" ) %>
-    </div>
+    <%= button_tag( "プレビュー", :id => "preview", :class => "button_black" ) %>
   <% end %>
 </div>

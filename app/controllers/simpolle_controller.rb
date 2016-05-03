@@ -29,6 +29,14 @@ class SimpolleController < ApplicationController
         "4" => "",
       }
     })
+    
+    @javascripts.push({
+      :content => <<EOS
+$(function(){
+  $( "#question-preview" ).width( global.content.width );
+})
+EOS
+    })
   end
   
   def show
@@ -42,5 +50,28 @@ class SimpolleController < ApplicationController
     end
     
     @question_key = encode( @question.id ) if ! @question.nil?
+  end
+  
+protected
+  def stylesheets
+    contents = [
+      stylesheet( "textarea.question_title", [
+        [ "width: 100%; resize:none" ]
+      ]),
+      stylesheet( "b.question_title", [
+        @style.font({ :size => "30px" })
+      ]),
+      stylesheet( "input.question_choice", [
+        [ "width: 100%; margin: 10px 0" ]
+      ]),
+      stylesheet( "button.question_choice", [
+        @style.font({ :size => "30px", :style => "normal" }),
+        [ "width: 100%" ],
+      ]),
+    ]
+    
+    super.concat([{
+      :content => contents.join( "\n" )
+    }])
   end
 end
