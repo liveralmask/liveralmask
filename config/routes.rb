@@ -18,8 +18,9 @@ Rails.application.routes.draw do
   get "simpolle/create"                => "simpolle#create"
   post "simpolle/create"               => "simpolle#create"
   post "simpolle/preview"              => "simpolle#preview"
+  get "simpolle/show"                  => "simpolle#show"
   get "simpolle/show/:question_key"    => "simpolle#show"
-  post "simpolle/choice/:question_key" => "simpolle#choice"
+  post "simpolle/choice"               => "simpolle#choice"
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

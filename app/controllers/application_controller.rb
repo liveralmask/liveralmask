@@ -22,6 +22,7 @@ protected
     @style = Owrb::HTML::Style
     @stylesheets = stylesheets
     @javascripts = javascripts
+    @errmsgs = errmsgs
   end
   
   def after_action
@@ -57,20 +58,6 @@ protected
     @cookie = Owrb::Rails::Cookie.new( cookies )
   end
   
-  def cipher( login_key, account_id )
-    cipher = Owrb::Data.cipher
-    cipher.key_iv( login_key, "01" * ( ( account_id % 10 ) + 1 ) )
-    cipher
-  end
-  
-  def encrypt( cipher, data )
-    Owrb::Data::Base64.encode( cipher.encrypt( Owrb::JSON.encode( data ) ) )
-  end
-  
-  def decrypt( cipher, data )
-    Owrb::Data::Base64.decode( cipher.decrypt( Owrb::JSON.encode( data ) ) )
-  end
-  
   def encode( data )
     Owrb::Data::Base64.encode( data )
   end
@@ -97,8 +84,12 @@ protected
         [ "margin: 10px 0" ]
       ]),
       stylesheet( ".button_black:hover", [
-        @style.border({ :border => "1px solid #4a4b4" }),
+        @style.border({ :border => "1px solid #4a4b4a" }),
         @style.background({ :linear_gradient => { :color => [ "#646464", "#282828" ] } }),
+      ]),
+      stylesheet( ".button_black:disabled", [
+        @style.border({ :border => "1px solid #bfbfbf" }),
+        @style.background({ :color => "#bfbfbf", :image => "none" }),
       ]),
       stylesheet( ".button_blue", [
         @style.border({ :border => "1px solid #15aeec", :radius => "3px" }),
@@ -111,6 +102,10 @@ protected
         @style.border({ :border => "1px solid #1090c3" }),
         @style.background({ :linear_gradient => { :color => [ "#1ab0ec", "#1a92c2" ] } }),
       ]),
+      stylesheet( ".button_blue:disabled", [
+        @style.border({ :border => "1px solid #bfbfbf" }),
+        @style.background({ :color => "#bfbfbf", :image => "none" }),
+      ]),
       stylesheet( ".button_green", [
         @style.border({ :border => "1px solid #34740e", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#4ba614", "#008c00" ] } }),
@@ -121,7 +116,30 @@ protected
       stylesheet( ".button_green:hover", [
         @style.border({ :border => "1px solid #224b09" }),
         @style.background({ :linear_gradient => { :color => [ "#36780f", "#005900" ] } }),
-      ])
+      ]),
+      stylesheet( ".button_green:disabled", [
+        @style.border({ :border => "1px solid #bfbfbf" }),
+        @style.background({ :color => "#bfbfbf", :image => "none" }),
+      ]),
+      stylesheet( ".button_purple", [
+        @style.border({ :border => "1px solid #8a66f4", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#b29af8", "#9174ed" ] } }),
+        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
+        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
+        [ "margin: 10px 0" ]
+      ]),
+      stylesheet( ".button_purple:hover", [
+        @style.border({ :border => "1px solid #693bf1" }),
+        @style.background({ :linear_gradient => { :color => [ "#8e6af5", "#6d47e7" ] } }),
+      ]),
+      stylesheet( ".button_purple:disabled", [
+        @style.border({ :border => "1px solid #bfbfbf" }),
+        @style.background({ :color => "#bfbfbf", :image => "none" }),
+      ]),
+      stylesheet( ".error", [
+        @style.font({ :size => "24px", :family => "arial", :style => "bold" }),
+        @style.text({ :color => "#FF0000" }),
+      ]),
     ]
     
     [{
@@ -130,22 +148,33 @@ protected
   end
   
   def javascripts
-    [{
-      :content => <<EOS
-var global = {};
-
-$(function(){
-  opjs.document.set( document );
-  global.element = opjs.document.element;
+    []
+  end
   
-  var width = screen.width;
-  if ( 640 < width ) width = 640;
-  global.content = {
-    "width":  width,
-    "height": screen.height,
-  };
-})
-EOS
-    }]
+  def errmsgs
+    {
+      :not_found => "該当データが存在しませんでした"
+    }
+  end
+  
+  def time_limit( time_limit )
+    now = Time.now
+    diff = Owrb::Time.new( now ).diff( time_limit )
+    if 0 == diff[ :total_seconds ]
+      at = "0秒"
+    else
+      at = ""
+      at = "#{at}#{diff[ :days ]}日" if 0 < diff[ :days ]
+      at = "#{at}#{diff[ :hours ]}時間" if 0 < diff[ :hours ]
+      at = "#{at}#{diff[ :minutes ]}分" if 0 < diff[ :minutes ]
+      at = "#{at}#{diff[ :seconds ]}秒" if 0 < diff[ :seconds ]
+    end
+    is_finished = ( time_limit <= now )
+    at = is_finished ? "終了：約#{at}前" : "締切：約#{at}後"
+    {
+      :at          => at,
+      :time        => Owrb::Time.format( :ymdhms, time_limit ),
+      :is_finished => is_finished,
+    }
   end
 end

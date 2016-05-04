@@ -41,8 +41,8 @@ class AccountController < ApplicationController
       
       provider_account.login_key = generate_login_key
       cipher = cipher( provider_account.login_key, account.id )
-      provider_account.info         = encrypt( cipher, info )
-      provider_account.access_token = encrypt( cipher, access_token )
+      provider_account.info         = encrypt( cipher, Owrb::JSON.encode( info ) )
+      provider_account.access_token = encrypt( cipher, Owrb::JSON.encode( access_token ) )
       provider_account.save!
       
       cookie.set( :login_key, provider_account.login_key )
@@ -62,5 +62,19 @@ protected
       keys.push Random.new( random.rand( 0xFFFFFFFF ) ).rand( 0xFFFFFFFF )
     }
     [ random.rand( 0xFFFFFFFF ).to_s( 16 ), Owrb::Data.hash( keys.join( "_" ) ), random.rand( 0xFFFFFFFF ).to_s( 16 ) ].join( "" )
+  end
+  
+  def cipher( login_key, account_id )
+    cipher = Owrb::Data.cipher
+    cipher.key_iv( login_key, "01" * ( ( account_id % 10 ) + 1 ) )
+    cipher
+  end
+  
+  def encrypt( cipher, data )
+    encode( cipher.encrypt( data ) )
+  end
+  
+  def decrypt( cipher, data )
+    decode( cipher.decrypt( data ) )
   end
 end
