@@ -4,7 +4,7 @@ class SimpolleController < ApplicationController
     @question[ "time_limits" ] = {}
     7.times{|index|
       day = index + 1
-      @question[ "time_limits" ][ "#{day}日後に投票終了" ] = day
+      @question[ "time_limits" ][ "#{day}日後に終了" ] = day
     }
     @question[ "time_limit" ] = "1" if ! @question.key?( "time_limit" )
     
@@ -103,6 +103,7 @@ EOS
     self_question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
     if ! self_question.nil?
       @self_question = Owrb::JSON.decode( decode( self_question.question ) )
+      @self_question[ :key ] = encode( self_question.id.to_s )
     end
   end
   

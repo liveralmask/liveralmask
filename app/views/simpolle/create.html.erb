@@ -1,6 +1,6 @@
 <div class="center" id="question-edit">
   <%= form_tag( "/simpolle/preview", :method => :post ) do %>
-    <%= text_area_tag( "question[title]", @question[ "title" ], :class => "question_title", :size => "x3", :placeholder => "質問内容" ) %><br>
+    <%= text_area_tag( "question[title]", @question[ "title" ], :class => "question_title", :size => "x2", :placeholder => "質問内容" ) %><br>
     <%= text_field_tag( "question[choices][0]", @question[ "choices" ][ "0" ], :class => "question_choice", :placeholder => "選択肢1" ) %>
     <%= text_field_tag( "question[choices][1]", @question[ "choices" ][ "1" ], :class => "question_choice", :placeholder => "選択肢2" ) %>
     <%= text_field_tag( "question[choices][2]", @question[ "choices" ][ "2" ], :class => "question_choice", :placeholder => "選択肢3" ) %>

@@ -152,7 +152,34 @@ protected
   end
   
   def javascripts
-    []
+    [{
+      :content => <<EOS
+var global = {};
+
+$(function(){
+  opjs.document.set( document );
+  global.element = opjs.document.element;
+  
+  var width = screen.width;
+  if ( 640 < width ) width = 640;
+  global.content = {
+    "width":  width,
+    "height": screen.height,
+  };
+  
+  $( "button[type=submit]" ).prop( "disabled", false );
+  $( "button[type=submit]" ).attr( "data-disable-with", "*" );
+  $( "form" ).on( "submit", function(){
+    return check_submit();
+  });
+})
+
+function check_submit(){
+  $( this ).off( "submit" );
+  $( this ).submit();
+}
+EOS
+    }]
   end
   
   def errmsgs

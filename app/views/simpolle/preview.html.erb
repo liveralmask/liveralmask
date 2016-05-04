@@ -14,7 +14,11 @@
       <b class="question_time_limit"><%= @time_limit %></b>
       
       <% if ! @self_question.nil? %>
-        <div class="warning">このまま作成を行うと、以前作成した<br><%= @self_question[ "title" ] %><br>が削除されます。</div>
+        <div class="warning">
+          このまま作成を行うと以前作成した<br>
+          <%= link_to( @self_question[ "title" ], { :controller => :simpolle, :action => :show, :question_key => @self_question[ :key ] } ) %>
+          <br>が削除されます。
+        </div>
       <% end %>
     </div>
     

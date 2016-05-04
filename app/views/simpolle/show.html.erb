@@ -23,5 +23,9 @@
       <% } %>
       <b class="question_time_limit"><%= @time_limit %></b>
     <% end %>
+    
+    <%= form_tag( "/simpolle/create", :method => :get ) do %>
+      <%= button_tag( "新規作成する", :class => "button_black" ) %>
+    <% end %>
   <% end %>
 </div>
