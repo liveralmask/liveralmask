@@ -1,10 +1,10 @@
-<div class="center">
+<div class="center" id="question-preview">
   <%= form_tag( "/simpolle/create", :method => :post ) do %>
     <%= hidden_field_tag( :question, Owrb::JSON.encode( @question ) ) %>
     
     <%= button_tag( "編集する", :name => :edit, :class => "button_black" ) %>
     
-    <div id="question-preview" class="center">
+    <div>
       <b class="question_title"><%= @question[ "title" ] %></b>
       <% @question[ "choices" ].each{|i, text| %>
         <% next if text.empty? %>
@@ -12,6 +12,10 @@
         <%= button_tag( text, :type => :button, :class => "button_blue question_choice" ) %>
       <% } %>
       <b class="question_time_limit"><%= @time_limit %></b>
+      
+      <% if ! @self_question.nil? %>
+        <div class="warning">このまま作成を行うと、以前作成した<br><%= @self_question[ "title" ] %><br>が削除されます。</div>
+      <% end %>
     </div>
     
     <%= button_tag( "作成する", :name => :create, :class => "button_black" ) %>

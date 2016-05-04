@@ -50,6 +50,12 @@ EOS
     return if choices.empty?
     
     result = transaction{
+      question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
+      if ! question.nil?
+        SimpolleQuestionChoice.delete_all( simpolle_question_id: question.id )
+        question.delete
+      end
+      
       question = SimpolleQuestion.new
       question.question = encode( Owrb::JSON.encode({
         :title      => @question[ "title" ],
@@ -93,6 +99,11 @@ $(function(){
 })
 EOS
     })
+    
+    self_question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
+    if ! self_question.nil?
+      @self_question = Owrb::JSON.decode( decode( self_question.question ) )
+    end
   end
   
   def show
@@ -159,6 +170,8 @@ EOS
           question_choice = SimpolleQuestionChoice.new
           question_choice.simpolle_question_id = question_id
           question_choice.account_id = @provider_account.account_id
+        else
+          result[ "choices" ][ question_choice.choice ] -= 1
         end
         
         question_choice.choice = choice

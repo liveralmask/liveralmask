@@ -140,6 +140,10 @@ protected
         @style.font({ :size => "24px", :family => "arial", :style => "bold" }),
         @style.text({ :color => "#FF0000" }),
       ]),
+      stylesheet( ".warning", [
+        @style.font({ :size => "24px", :family => "arial", :style => "bold" }),
+        @style.text({ :color => "#FFCC00" }),
+      ]),
     ]
     
     [{
