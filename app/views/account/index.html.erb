@@ -1,1 +1,1 @@
-<a href="/account/auth/twitter?dst_url=<%= @dst_url %>">Twitterでログイン</a>
+<%= link_to( "Twitterでログイン", { :controller => :account, :action => :auth, :provider => :twitter, :dst_url => @dst_url } ) %>

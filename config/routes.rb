@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post "api/url/parse" => "url#parse"
   post "api/url/order" => "url#order"
   
+  get "account"                 => "account#index"
   get "account/auth/:provider"  => "account#auth"
   get "auth/:provider/callback" => "account#auth_callback"
   
