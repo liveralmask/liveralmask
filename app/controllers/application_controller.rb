@@ -3,10 +3,6 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  if ! Rails.env.development?
-    rescue_from Exception, with: error
-  end
-  
   before_filter :before_action
   after_filter :after_action
   
@@ -64,10 +60,6 @@ protected
   
   def decode( data )
     Owrb::Data::Base64.decode( data )
-  end
-  
-  def error( err )
-    render :json => { :errmsg => err.message }
   end
   
   def stylesheet( name, styles )
