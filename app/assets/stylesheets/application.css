@@ -15,19 +15,34 @@
  */
 
 html {
-  width: 100%;
+  width:   100%;
   padding: 0;
-  margin: 0;
+  margin:  0;
 }
 
 body {
-  width: 100%;
+  width:   100%;
   padding: 0;
-  margin: 0;
+  margin:  0;
 }
 
 div.center {
-  width: 98%;
-  margin: 10px auto;
+  width:      98%;
+  margin:     10px auto;
   text-align: center;
+  word-wrap:  break-word;
+}
+
+div.flex {
+  width:   100%;
+  display: inline-flex;
+}
+
+div.parent {
+  position: relative;
+}
+
+div.child {
+  position: absolute;
+  bottom:   0px;
 }

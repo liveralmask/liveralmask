@@ -73,7 +73,7 @@ EOS
       }
     }
     
-    redirect_to "/simpolle/show/#{result[ :question_key ]}"
+    redirect_to "/simpolle/view/#{result[ :question_key ]}"
   end
   
   def preview
@@ -100,59 +100,80 @@ $(function(){
 EOS
     })
     
-    self_question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
-    if ! self_question.nil?
-      @self_question = Owrb::JSON.decode( decode( self_question.question ) )
-      @self_question[ :key ] = encode( self_question.id.to_s )
+    delete_question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
+    if ! delete_question.nil?
+      @delete_question = Owrb::JSON.decode( decode( delete_question.question ) )
+      @delete_question[ :key ] = encode( delete_question.id.to_s )
     end
   end
   
-  def show
+  def view
     @question_choice = -1
     begin
       @question_key = param( "question_key", "" )
       if @question_key.empty?
         question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
-        @question_key = encode( question.id.to_s ) if ! question.nil?
+        if ! question.nil?
+          @question_key = encode( question.id.to_s )
+          redirect_to "/simpolle/view/#{@question_key}"
+        end
       else
         question_id = decode( @question_key ).to_i
         question = SimpolleQuestion.find_by( id: question_id )
-      end
-      
-      if ! question.nil?
-        question_choice = SimpolleQuestionChoice.find_by( simpolle_question_id: question_id )
-        @question_choice = question_choice.choice if ! question_choice.nil?
+        if ! question.nil?
+          question_choice = SimpolleQuestionChoice.find_by( simpolle_question_id: question_id )
+          @question_choice = question_choice.choice if ! question_choice.nil?
+        end
       end
     rescue => err
       question = nil
     end
     
-    if ! question.nil?
-      @question = Owrb::JSON.decode( decode( question.question ) )
-      time_limit = time_limit( Time.at( @question[ "time_limit" ] ) )
-      @time_limit = "#{time_limit[ :at ]}(#{time_limit[ :time ]})"
-      @is_finished = time_limit[ :is_finished ]
-      
+    return if question.nil?
+    
+    @question = Owrb::JSON.decode( decode( question.question ) )
+    time_limit = time_limit( Time.at( @question[ "time_limit" ] ) )
+    @time_limit = "#{time_limit[ :at ]}(#{time_limit[ :time ]})"
+    @is_finished = time_limit[ :is_finished ]
+    
+    @question[ :total ] = ""
+    @question[ :result ] = @question[ "choices" ].collect{|text| { :text => "" }}
+    if @is_finished || ( question.account_id == @provider_account.account_id )
       result = Owrb::JSON.decode( decode( question.result ) )
-      result = nil if ( question.account_id != @provider_account.account_id ) && ! @is_finished
-      if ! result.nil?
-        total = result[ "choices" ].inject{|sum, value| sum + value}
-        @question[ "choices" ].each_with_index{|text, i|
-          num = result[ "choices" ][ i ]
-          parcentage = ( 0 == total ) ? 0 : ( ( num.to_f / total ) * 100 ).to_i
-          
-          @question[ "choices" ][ i ] = "#{text}  #{parcentage}%(#{num})"
-        }
-      end
+      total = result[ "choices" ].inject{|sum, value| sum + value}
+      @question[ :total ] = total.to_s( :delimited )
+      max_percentage = 0
+      result[ "choices" ].each_with_index{|num, i|
+        percentage = ( 0 == total ) ? 0.0 : ( ( num.to_f / total ) * 100 ).round( 2 )
+        width = percentage.to_i
+        if 0.0 == percentage
+          percentage = 0
+        elsif 1.0 <= percentage
+          percentage = percentage.to_i
+        end
+        
+        @question[ :result ][ i ][ :text ]  = "#{percentage}%<br>(#{num.to_s( :delimited )})"
+        @question[ :result ][ i ][ :width ] = width
+        @question[ :result ][ i ][ :percentage ] = percentage
+        
+        max_percentage = percentage if max_percentage < percentage
+      }
       
-      @javascripts.push({
-        :content => <<EOS
+      @question[ :result ].each_with_index{|result, i|
+        if max_percentage == result[ :percentage ]
+          result[ :text ] = "<b>#{result[ :text ]}</b>"
+          @question[ :result ][ i ] = result
+        end
+      }
+    end
+    
+    @javascripts.push({
+      :content => <<EOS
 $(function(){
-  $( "#question-show" ).width( global.content.width );
+  $( "#question-view" ).width( global.content.width );
 })
 EOS
-      })
-    end
+    })
   end
   
   def choice
@@ -193,34 +214,84 @@ EOS
       }
     }
     
-    redirect_to "/simpolle/show/#{result[ :question_key ]}"
+    redirect_to "/simpolle/view/#{result[ :question_key ]}"
   end
   
 protected
   def stylesheets
     contents = [
+      stylesheet( "div.question_result", [
+        @style.text({ :align => "left" }),
+        [ "width: 100%" ],
+      ]),
+      stylesheet( "div.question_result_num", [
+        @style.text({ :align => "right" }),
+        @style.font({ :size => "24px" }),
+        [ "width: 20%; margin: auto 0" ],
+      ]),
       stylesheet( "textarea.question_title", [
         @style.font({ :size => "30px" }),
-        [ "width: 100%; resize:none" ],
+        [ "width: 80%; resize:none" ],
       ]),
-      stylesheet( "b.question_title", [
-        @style.font({ :size => "30px" })
+      stylesheet( "div.question_title", [
+        @style.font({ :size => "30px" }),
+        @style.text({ :align => "left", :style => "bold" }),
+        [ "width: 80%" ],
+      ]),
+      stylesheet( "div.question_choice", [
+        [ "width: 80%" ],
+      ]),
+      stylesheet( "div.question_choice_text", [
+        @style.font({ :size => "30px" }),
+        [ "margin: 10px 0" ],
       ]),
       stylesheet( "input.question_choice", [
         @style.font({ :size => "30px" }),
-        [ "width: 100%; margin: 10px 0" ],
-      ]),
-      stylesheet( "button.question_choice", [
-        @style.font({ :size => "30px", :style => "normal" }),
-        [ "width: 100%" ],
+        [ "width: 80%; margin: 10px 0" ],
       ]),
       stylesheet( "select.question_time_limits", [
         @style.font({ :size => "20px" }),
-        [ "width: 100%" ],
+        [ "width: 80%" ],
       ]),
-      stylesheet( "b.question_time_limit", [
+      stylesheet( "div.question_time_limit", [
         @style.font({ :size => "20px" }),
         @style.text({ :color => "#FF0000" }),
+      ]),
+      stylesheet( "div.question_time_limit_finish", [
+        @style.font({ :size => "20px" }),
+        @style.text({ :color => "#0000FF" }),
+      ]),
+      stylesheet( ".question_button_select", [
+        @style.border({ :border => "1px solid #15aeec", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#FFFFFF", "#FFFFFF" ] } }),
+        @style.font({ :size => "30px", :family => "arial", :style => "normal" }),
+        @style.text({ :color => "#49c0f0", :align => "left" }),
+        [ "width: 80%; margin: 10px 0" ],
+      ]),
+      stylesheet( ".question_button_select:hover", [
+        @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#49c0f0" ] } }),
+        @style.text({ :color => "#FFFFFF" }),
+      ]),
+      stylesheet( ".question_button_selected", [
+        @style.border({ :border => "1px solid #228b22", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#FFFFFF", "#FFFFFF" ] } }),
+        @style.font({ :size => "30px", :family => "arial", :style => "normal" }),
+        @style.text({ :color => "#00cc66", :align => "left" }),
+        [ "width: 80%; margin: 10px 0" ],
+      ]),
+      stylesheet( ".question_button_selected:hover", [
+        @style.background({ :linear_gradient => { :color => [ "#00cc66", "#00cc66" ] } }),
+        @style.text({ :color => "#FFFFFF" }),
+      ]),
+      stylesheet( ".question_button_select_finish", [
+        @style.border({ :border => "1px solid #49c0f0", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#49c0f0" ] } }),
+        [ "width: 80%; height: 90%; margin: 10px 0" ],
+      ]),
+      stylesheet( ".question_button_selected_finish", [
+        @style.border({ :border => "1px solid #00cc66", :radius => "3px" }),
+        @style.background({ :linear_gradient => { :color => [ "#00cc66", "#00cc66" ] } }),
+        [ "width: 80%; height: 90%; margin: 10px 0" ],
       ]),
     ]
     

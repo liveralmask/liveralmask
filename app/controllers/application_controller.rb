@@ -76,65 +76,16 @@ protected
   
   def stylesheets
     contents = [
-      stylesheet( ".button_black", [
+      stylesheet( ".default_button", [
         @style.border({ :border => "1px solid #616261", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#7d7e7d", "#0e0e0e" ] } }),
         @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
         @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
         [ "margin: 10px 0" ]
       ]),
-      stylesheet( ".button_black:hover", [
+      stylesheet( ".default_button:hover", [
         @style.border({ :border => "1px solid #4a4b4a" }),
         @style.background({ :linear_gradient => { :color => [ "#646464", "#282828" ] } }),
-      ]),
-      stylesheet( ".button_black:disabled", [
-        @style.border({ :border => "1px solid #bfbfbf" }),
-        @style.background({ :color => "#bfbfbf", :image => "none" }),
-      ]),
-      stylesheet( ".button_blue", [
-        @style.border({ :border => "1px solid #15aeec", :radius => "3px" }),
-        @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#2CAFE3" ] } }),
-        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
-        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
-        [ "margin: 10px 0" ]
-      ]),
-      stylesheet( ".button_blue:hover", [
-        @style.border({ :border => "1px solid #1090c3" }),
-        @style.background({ :linear_gradient => { :color => [ "#1ab0ec", "#1a92c2" ] } }),
-      ]),
-      stylesheet( ".button_blue:disabled", [
-        @style.border({ :border => "1px solid #bfbfbf" }),
-        @style.background({ :color => "#bfbfbf", :image => "none" }),
-      ]),
-      stylesheet( ".button_green", [
-        @style.border({ :border => "1px solid #34740e", :radius => "3px" }),
-        @style.background({ :linear_gradient => { :color => [ "#4ba614", "#008c00" ] } }),
-        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
-        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
-        [ "margin: 10px 0" ]
-      ]),
-      stylesheet( ".button_green:hover", [
-        @style.border({ :border => "1px solid #224b09" }),
-        @style.background({ :linear_gradient => { :color => [ "#36780f", "#005900" ] } }),
-      ]),
-      stylesheet( ".button_green:disabled", [
-        @style.border({ :border => "1px solid #bfbfbf" }),
-        @style.background({ :color => "#bfbfbf", :image => "none" }),
-      ]),
-      stylesheet( ".button_purple", [
-        @style.border({ :border => "1px solid #8a66f4", :radius => "3px" }),
-        @style.background({ :linear_gradient => { :color => [ "#b29af8", "#9174ed" ] } }),
-        @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
-        @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
-        [ "margin: 10px 0" ]
-      ]),
-      stylesheet( ".button_purple:hover", [
-        @style.border({ :border => "1px solid #693bf1" }),
-        @style.background({ :linear_gradient => { :color => [ "#8e6af5", "#6d47e7" ] } }),
-      ]),
-      stylesheet( ".button_purple:disabled", [
-        @style.border({ :border => "1px solid #bfbfbf" }),
-        @style.background({ :color => "#bfbfbf", :image => "none" }),
       ]),
       stylesheet( ".error", [
         @style.font({ :size => "24px", :family => "arial", :style => "bold" }),

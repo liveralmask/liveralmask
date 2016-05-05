@@ -10,16 +10,15 @@ Rails.application.routes.draw do
   post "api/url/parse" => "url#parse"
   post "api/url/order" => "url#order"
   
-  get "account"                 => "account#index"
   get "account/auth/:provider"  => "account#auth"
   get "auth/:provider/callback" => "account#auth_callback"
   
-  get "simpolle"                       => "simpolle#index"
+  get "simpolle"                       => "simpolle#view"
   get "simpolle/create"                => "simpolle#create"
   post "simpolle/create"               => "simpolle#create"
   post "simpolle/preview"              => "simpolle#preview"
-  get "simpolle/show"                  => "simpolle#show"
-  get "simpolle/show/:question_key"    => "simpolle#show"
+  get "simpolle/view"                  => "simpolle#view"
+  get "simpolle/view/:question_key"    => "simpolle#view"
   post "simpolle/choice"               => "simpolle#choice"
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
