@@ -21,7 +21,6 @@ class AccountController < ApplicationController
       :secret => auth[ "credentials" ][ "secret" ],
     }
     provider_uid = "#{provider}:#{uid}"
-    login_key = generate_login_key
     
     provider_account = ProviderAccount.find_by( uid: provider_uid )
     account_id = provider_account.account_id if ! provider_account.nil?
@@ -37,9 +36,9 @@ class AccountController < ApplicationController
         provider_account = ProviderAccount.new
         provider_account.uid = provider_uid
         provider_account.account_id = account.id
+        provider_account.login_key = generate_login_key
       end
       
-      provider_account.login_key = generate_login_key
       cipher = cipher( provider_account.login_key, account.id )
       provider_account.info         = encrypt( cipher, Owrb::JSON.encode( info ) )
       provider_account.access_token = encrypt( cipher, Owrb::JSON.encode( access_token ) )
