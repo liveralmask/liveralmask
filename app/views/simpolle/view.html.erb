@@ -24,9 +24,9 @@
             <div class="question_choice parent">
               <% if 0 < @question[ :result ][ i ][ :width ] %>
                 <% if i == @question_choice %>
-                  <%= button_tag( "", :type => :button, :disabled => true, :class => "question_button_selected_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
+                  <%= button_tag( " ", :type => :button, :disabled => true, :class => "question_button_selected_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
                 <% else %>
-                  <%= button_tag( "", :type => :button, :disabled => true, :class => "question_button_select_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
+                  <%= button_tag( " ", :type => :button, :disabled => true, :class => "question_button_select_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
                 <% end %>
               <% end %>
               
