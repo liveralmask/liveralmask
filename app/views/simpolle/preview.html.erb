@@ -1,29 +1,27 @@
-<div class="center" id="question-preview">
-  <%= form_tag( "/simpolle/create", :method => :post ) do %>
-    <%= hidden_field_tag( :question, Owrb::JSON.encode( @question ) ) %>
-    
-    <%= button_tag( "編集する", :name => :edit, :class => "default_button" ) %>
-    
-    <div class="question_result">
-      <div class="flex"><%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %><div class="question_result_num">0</div></div>
-      <% @question[ "choices" ].each{|i, text| %>
-        <% next if text.empty? %>
-        
-        <div class="flex"><%= button_tag( text, :type => :button, :class => "question_button_select" ) %><div class="question_result_num">0%<br>(0)</div></div>
-      <% } %>
+<%= form_tag( "/simpolle/create", :method => :post ) do %>
+  <%= hidden_field_tag( :question, Owrb::JSON.encode( @question ) ) %>
+  
+  <%= button_tag( "編集する", :name => :edit, :class => "button" ) %>
+  
+  <div class="question_result">
+    <div class="flex"><%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %><div class="question_result_num">0</div></div>
+    <% @question[ "choices" ].each{|i, text| %>
+      <% next if text.empty? %>
+      
+      <div class="flex"><%= button_tag( text, :type => :button, :class => "question_button_select" ) %><div class="question_result_num">0%<br>(0)</div></div>
+    <% } %>
+  </div>
+  
+  <div class="question_time_limit"><%= @time_limit %></div>
+  
+  <% if ! @delete_question.nil? %>
+    <div class="warning">
+      このまま作成すると以前作成した<br>
+      <%= link_to( simple_format( h( @delete_question[ "title" ] ), {}, :wrapper_tag => :div ), { :controller => :simpolle, :action => :view, :question_key => @delete_question[ :key ] } ) %>
+      が削除されます。
     </div>
-    
-    <div class="question_time_limit"><%= @time_limit %></div>
-    
-    <% if ! @delete_question.nil? %>
-      <div class="warning">
-        このまま作成すると以前作成した<br>
-        <%= link_to( simple_format( h( @delete_question[ "title" ] ), {}, :wrapper_tag => :div ), { :controller => :simpolle, :action => :view, :question_key => @delete_question[ :key ] } ) %>
-        が削除されます。
-      </div>
-    <% end %>
-    
-    <%= button_tag( "作成する", :name => :create, :class => "default_button" ) %>
-    
   <% end %>
-</div>
+  
+  <%= button_tag( "作成する", :name => :create, :class => "button" ) %>
+  
+<% end %>

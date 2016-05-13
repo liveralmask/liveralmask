@@ -1,13 +1,11 @@
-<div class="center" id="question-edit">
-  <%= form_tag( "/simpolle/preview", :method => :post ) do %>
-    <%= text_area_tag( "question[title]", @question[ "title" ], :class => "question_title", :size => "x3", :placeholder => "質問内容(最大35文字)", :maxlength => 35 ) %><br>
-    <%= text_field_tag( "question[choices][0]", @question[ "choices" ][ "0" ], :class => "question_choice", :placeholder => "選択肢1(最大15文字)", :maxlength => 15 ) %><br>
-    <%= text_field_tag( "question[choices][1]", @question[ "choices" ][ "1" ], :class => "question_choice", :placeholder => "選択肢2(最大15文字)", :maxlength => 15 ) %><br>
-    <%= text_field_tag( "question[choices][2]", @question[ "choices" ][ "2" ], :class => "question_choice", :placeholder => "選択肢3(最大15文字)", :maxlength => 15 ) %><br>
-    <%= text_field_tag( "question[choices][3]", @question[ "choices" ][ "3" ], :class => "question_choice", :placeholder => "選択肢4(最大15文字)", :maxlength => 15 ) %><br>
-    <%= text_field_tag( "question[choices][4]", @question[ "choices" ][ "4" ], :class => "question_choice", :placeholder => "選択肢5(最大15文字)", :maxlength => 15 ) %><br>
-    <%= select_tag( "question[time_limit]", options_for_select( @question[ "time_limits" ], :selected => @question[ "time_limit" ] ), :class => "question_time_limits" ) %><br>
-    
-    <%= button_tag( "プレビュー", :id => "preview", :class => "default_button" ) %>
-  <% end %>
-</div>
+<%= form_tag( "/simpolle/preview", :method => :post ) do %>
+  <%= text_area_tag( "question[title]", @question[ "title" ], :class => "question_title", :size => "x3", :placeholder => "質問内容(最大35文字)", :maxlength => 35 ) %><br>
+  <%= text_field_tag( "question[choices][0]", @question[ "choices" ][ "0" ], :class => "question_choice", :placeholder => "選択肢1(最大15文字)", :maxlength => 15 ) %><br>
+  <%= text_field_tag( "question[choices][1]", @question[ "choices" ][ "1" ], :class => "question_choice", :placeholder => "選択肢2(最大15文字)", :maxlength => 15 ) %><br>
+  <%= text_field_tag( "question[choices][2]", @question[ "choices" ][ "2" ], :class => "question_choice", :placeholder => "選択肢3(最大15文字)", :maxlength => 15 ) %><br>
+  <%= text_field_tag( "question[choices][3]", @question[ "choices" ][ "3" ], :class => "question_choice", :placeholder => "選択肢4(最大15文字)", :maxlength => 15 ) %><br>
+  <%= text_field_tag( "question[choices][4]", @question[ "choices" ][ "4" ], :class => "question_choice", :placeholder => "選択肢5(最大15文字)", :maxlength => 15 ) %><br>
+  <%= select_tag( "question[time_limit]", options_for_select( @question[ "time_limits" ], :selected => @question[ "time_limit" ] ), :class => "question_time_limits" ) %><br>
+  
+  <%= button_tag( "プレビュー", :id => "preview", :class => "button" ) %>
+<% end %>

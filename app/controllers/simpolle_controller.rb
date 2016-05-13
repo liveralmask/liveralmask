@@ -11,7 +11,6 @@ class SimpolleController < ApplicationController
     @javascripts.push({
       :content => <<EOS
 $(function(){
-  $( "#question-edit" ).width( global.content.width );
   $( "textarea" ).keyup(function(){
     global.check_preview();
   });
@@ -92,14 +91,6 @@ EOS
     time_limit = time_limit( @question[ "time_limit" ].to_i.days.from_now( Time.now ) )
     @time_limit = "#{time_limit[ :at ]}(#{time_limit[ :time ]})"
     
-    @javascripts.push({
-      :content => <<EOS
-$(function(){
-  $( "#question-preview" ).width( global.content.width );
-})
-EOS
-    })
-    
     delete_question = SimpolleQuestion.find_by( account_id: @provider_account.account_id )
     if ! delete_question.nil?
       @delete_question = Owrb::JSON.decode( decode( delete_question.question ) )
@@ -136,12 +127,11 @@ EOS
     @time_limit = "#{time_limit[ :at ]}(#{time_limit[ :time ]})"
     @is_finished = time_limit[ :is_finished ]
     
-    @question[ :total ] = ""
+    result = Owrb::JSON.decode( decode( question.result ) )
+    total = result[ "choices" ].inject{|sum, value| sum + value}
+    @question[ :total ] = total.to_s( :delimited )
     @question[ :result ] = @question[ "choices" ].collect{|text| { :text => "" }}
     if @is_finished || ( question.account_id == @provider_account.account_id )
-      result = Owrb::JSON.decode( decode( question.result ) )
-      total = result[ "choices" ].inject{|sum, value| sum + value}
-      @question[ :total ] = total.to_s( :delimited )
       max_percentage = 0
       result[ "choices" ].each_with_index{|num, i|
         percentage = ( 0 == total ) ? 0.0 : ( ( num.to_f / total ) * 100 ).round( 2 )
@@ -166,14 +156,6 @@ EOS
         end
       }
     end
-    
-    @javascripts.push({
-      :content => <<EOS
-$(function(){
-  $( "#question-view" ).width( global.content.width );
-})
-EOS
-    })
   end
   
   def choice

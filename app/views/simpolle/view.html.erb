@@ -1,61 +1,65 @@
-<div class="center" id="question-view">
-  <%= form_tag( "/simpolle/create", :method => :get ) do %>
-    <%= button_tag( "新規作成する", :class => "default_button" ) %>
-  <% end %>
-  
-  <% if @question.nil? %>
-    <div class="error"><%= @errmsgs[ :not_found ] %></div>
-  <% else %>
-    <%= form_tag( "/simpolle/choice", :method => :post ) do %>
-      <%= hidden_field_tag( :question_key, @question_key ) %>
+<%= form_tag( "/simpolle/create", :method => :get ) do %>
+  <%= button_tag( "新規作成する", :class => "button" ) %>
+<% end %>
+
+<% if @question.nil? %>
+  <div class="error"><%= @errmsg[ :not_found ] %></div>
+<% else %>
+  <%= form_tag( "/simpolle/choice", :method => :post ) do %>
+    <%= hidden_field_tag( :question_key, @question_key ) %>
+    
+    <% if @is_finished %>
+      <div class="question_time_limit_finish"><%= @time_limit %></div>
       
-      <% if @is_finished %>
-        <div class="question_result">
+      <div class="question_result">
+        <div class="flex">
+          <%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %>
+          <div class="question_result_num"><%= @question[ :total ] %></div>
+        </div>
+        
+        <hr>
+        
+        <% @question[ "choices" ].each_with_index{|text, i| %>
           <div class="flex">
-            <%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %>
-            <div class="question_result_num"><%= @question[ :total ] %></div>
-          </div>
-          
-          <% @question[ "choices" ].each_with_index{|text, i| %>
-            <div class="flex">
-              <div class="question_choice parent">
+            <div class="question_choice parent">
+              <% if 0 < @question[ :result ][ i ][ :width ] %>
                 <% if i == @question_choice %>
                   <%= button_tag( "", :type => :button, :disabled => true, :class => "question_button_selected_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
                 <% else %>
                   <%= button_tag( "", :type => :button, :disabled => true, :class => "question_button_select_finish", :style => "width: #{@question[ :result ][ i ][ :width ]}%" ) %>
                 <% end %>
-                
-                <div class="question_choice_text child"><%= text %></div>
-              </div>
-              
-              <div class="question_result_num"><%= @question[ :result ][ i ][ :text ].html_safe %></div>
-            </div>
-          <% } %>
-        </div>
-        
-        <div class="question_time_limit_finish"><%= @time_limit %></div>
-      <% else %>
-        <div class="question_result">
-          <div class="flex">
-            <%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %>
-            <div class="question_result_num"><%= @question[ :total ] %></div>
-          </div>
-          
-          <% @question[ "choices" ].each_with_index{|text, i| %>
-            <div class="flex">
-              <% if i == @question_choice %>
-                <%= button_tag( text, :name => :cancel, :value => i, :class => "question_button_selected" ) %>
-              <% else %>
-                <%= button_tag( text, :name => :choice, :value => i, :class => "question_button_select" ) %>
               <% end %>
               
-              <div class="question_result_num"><%= @question[ :result ][ i ][ :text ].html_safe %></div>
+              <div class="question_choice_text child"><%= text %></div>
             </div>
-          <% } %>
+            
+            <div class="question_result_num"><%= @question[ :result ][ i ][ :text ].html_safe %></div>
+          </div>
+        <% } %>
+      </div>
+    <% else %>
+      <div class="question_time_limit"><%= @time_limit %></div>
+      
+      <div class="question_result">
+        <div class="flex">
+          <%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %>
+          <div class="question_result_num"><%= @question[ :total ] %></div>
         </div>
         
-        <div class="question_time_limit"><%= @time_limit %></div>
-      <% end %>
+        <hr>
+        
+        <% @question[ "choices" ].each_with_index{|text, i| %>
+          <div class="flex">
+            <% if i == @question_choice %>
+              <%= button_tag( text, :name => :cancel, :value => i, :class => "question_button_selected" ) %>
+            <% else %>
+              <%= button_tag( text, :name => :choice, :value => i, :class => "question_button_select" ) %>
+            <% end %>
+            
+            <div class="question_result_num"><%= @question[ :result ][ i ][ :text ].html_safe %></div>
+          </div>
+        <% } %>
+      </div>
     <% end %>
   <% end %>
-</div>
+<% end %>

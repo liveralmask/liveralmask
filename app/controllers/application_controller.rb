@@ -18,7 +18,7 @@ protected
     @style = Owrb::HTML::Style
     @stylesheets = stylesheets
     @javascripts = javascripts
-    @errmsgs = errmsgs
+    @errmsg = errmsg
   end
   
   def after_action
@@ -68,16 +68,20 @@ protected
   
   def stylesheets
     contents = [
-      stylesheet( ".default_button", [
+      stylesheet( ".button", [
         @style.border({ :border => "1px solid #616261", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#7d7e7d", "#0e0e0e" ] } }),
         @style.font({ :size => "20px", :family => "arial", :style => "bold" }),
         @style.text({ :shadow => "-1px -1px 0 rgba( 0, 0, 0, 0.3 )", :color => "#FFFFFF" }),
         [ "margin: 10px 0" ]
       ]),
-      stylesheet( ".default_button:hover", [
+      stylesheet( ".button:hover", [
         @style.border({ :border => "1px solid #4a4b4a" }),
         @style.background({ :linear_gradient => { :color => [ "#646464", "#282828" ] } }),
+      ]),
+      stylesheet( ".button:disabled", [
+        @style.border({ :border => "1px solid #bfbfbf" }),
+        @style.background({ :color => "#bfbfbf", :image => "none" }),
       ]),
       stylesheet( ".error", [
         @style.font({ :size => "24px", :family => "arial", :style => "bold" }),
@@ -104,7 +108,7 @@ $(function(){
   global.element = opjs.document.element;
   
   var width = screen.width;
-  if ( 640 < width ) width = 640;
+  if ( 1000 < width ) width = 1000;
   global.content = {
     "width":  width,
     "height": screen.height,
@@ -115,6 +119,8 @@ $(function(){
   $( "form" ).on( "submit", function(){
     return check_submit();
   });
+  
+  $( "#main" ).width( global.content.width );
 })
 
 function check_submit(){
@@ -125,7 +131,7 @@ EOS
     }]
   end
   
-  def errmsgs
+  def errmsg
     {
       :not_found => "該当データが存在しませんでした"
     }

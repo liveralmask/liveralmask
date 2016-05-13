@@ -1,1 +1,5 @@
-<%= link_to( "Twitterでログイン", { :controller => :account, :action => :auth, :provider => :twitter, :dst_url => @dst_url } ) %>
+<%= form_tag( "/account/auth/twitter", :method => :get ) do %>
+  <%= hidden_field_tag( :dst_url, @dst_url ) %>
+  
+  <%= button_tag( "Login with Twitter", :class => "button" ) %>
+<% end %>
