@@ -107,20 +107,11 @@ $(function(){
   opjs.document.set( document );
   global.element = opjs.document.element;
   
-  var width = screen.width;
-  if ( 1000 < width ) width = 1000;
-  global.content = {
-    "width":  width,
-    "height": screen.height,
-  };
-  
   $( "button[type=submit]" ).prop( "disabled", false );
   $( "button[type=submit]" ).attr( "data-disable-with", "*" );
   $( "form" ).on( "submit", function(){
     return check_submit();
   });
-  
-  $( "#main" ).width( global.content.width );
 })
 
 function check_submit(){
