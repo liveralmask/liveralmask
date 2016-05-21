@@ -37,12 +37,3 @@ div.flex {
   width:   100%;
   display: inline-flex;
 }
-
-div.parent {
-  position: relative;
-}
-
-div.child {
-  position: absolute;
-  bottom:   0px;
-}

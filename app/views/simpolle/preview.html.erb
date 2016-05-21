@@ -4,11 +4,17 @@
   <%= button_tag( "編集する", :name => :edit, :class => "button" ) %>
   
   <div class="question_result">
-    <div class="flex"><%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %><div class="question_result_num">0</div></div>
+    <div class="question_select flex">
+      <%= simple_format( h( @question[ "title" ] ), { :class => "question_title" }, :wrapper_tag => :div ) %>
+      <div class="question_result_num">0票</div>
+    </div>
+    
+    <hr>
+    
     <% @question[ "choices" ].each{|i, text| %>
       <% next if text.empty? %>
       
-      <div class="flex"><%= button_tag( text, :type => :button, :class => "question_button_select" ) %><div class="question_result_num">0%<br>(0)</div></div>
+      <div class="question_select flex"><%= button_tag( text, :type => :button, :class => "question_button_select" ) %><div class="question_result_num">0%<br>(0)</div></div>
     <% } %>
   </div>
   

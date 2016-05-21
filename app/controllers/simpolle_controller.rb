@@ -135,7 +135,6 @@ EOS
       max_percentage = 0
       result[ "choices" ].each_with_index{|num, i|
         percentage = ( 0 == total ) ? 0.0 : ( ( num.to_f / total ) * 100 ).round( 2 )
-        width = percentage.to_i
         if 0.0 == percentage
           percentage = 0
         elsif 1.0 <= percentage
@@ -143,7 +142,6 @@ EOS
         end
         
         @question[ :result ][ i ][ :text ]  = "#{percentage}%<br>(#{num.to_s( :delimited )})"
-        @question[ :result ][ i ][ :width ] = width
         @question[ :result ][ i ][ :percentage ] = percentage
         
         max_percentage = percentage if max_percentage < percentage
@@ -209,31 +207,31 @@ protected
       stylesheet( "div.question_result_num", [
         @style.text({ :align => "right" }),
         @style.font({ :size => "24px" }),
-        [ "width: 20%; margin: auto 0" ],
+        [ "width: 30%; margin: auto 0" ],
       ]),
       stylesheet( "textarea.question_title", [
         @style.font({ :size => "30px" }),
-        [ "width: 80%; resize:none" ],
+        [ "width: 70%; resize:none" ],
       ]),
       stylesheet( "div.question_title", [
         @style.font({ :size => "30px" }),
         @style.text({ :align => "left", :style => "bold" }),
-        [ "width: 80%" ],
+        [ "width: 70%" ],
       ]),
       stylesheet( "div.question_choice", [
-        [ "width: 80%" ],
+        [ "width: 70%; margin: auto 0" ],
       ]),
       stylesheet( "div.question_choice_text", [
         @style.font({ :size => "30px" }),
-        [ "margin: 10px 0" ],
+        [ "margin: auto 10px; padding: 0" ],
       ]),
       stylesheet( "input.question_choice", [
         @style.font({ :size => "30px" }),
-        [ "width: 80%; margin: 10px 0" ],
+        [ "width: 70%; margin: 10px 0" ],
       ]),
       stylesheet( "select.question_time_limits", [
         @style.font({ :size => "20px" }),
-        [ "width: 80%" ],
+        [ "width: 70%" ],
       ]),
       stylesheet( "div.question_time_limit", [
         @style.font({ :size => "20px" }),
@@ -243,12 +241,15 @@ protected
         @style.font({ :size => "20px" }),
         @style.text({ :color => "#0000FF" }),
       ]),
+      stylesheet( ".question_select", [
+        [ "width: 100%; padding: 10px 0" ],
+      ]),
       stylesheet( ".question_button_select", [
         @style.border({ :border => "1px solid #15aeec", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#FFFFFF", "#FFFFFF" ] } }),
         @style.font({ :size => "30px", :family => "arial", :style => "normal" }),
         @style.text({ :color => "#49c0f0", :align => "left" }),
-        [ "width: 80%; margin: 10px 0" ],
+        [ "width: 70%" ],
       ]),
       stylesheet( ".question_button_select:hover", [
         @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#49c0f0" ] } }),
@@ -259,21 +260,24 @@ protected
         @style.background({ :linear_gradient => { :color => [ "#FFFFFF", "#FFFFFF" ] } }),
         @style.font({ :size => "30px", :family => "arial", :style => "normal" }),
         @style.text({ :color => "#00cc66", :align => "left" }),
-        [ "width: 80%; margin: 10px 0" ],
+        [ "width: 70%" ],
       ]),
       stylesheet( ".question_button_selected:hover", [
         @style.background({ :linear_gradient => { :color => [ "#00cc66", "#00cc66" ] } }),
         @style.text({ :color => "#FFFFFF" }),
       ]),
-      stylesheet( ".question_button_select_finish", [
+      stylesheet( ".question_bar", [
+        [ "height: 100%; list-style-type: none; padding: 0; margin: 0" ],
+      ]),
+      stylesheet( ".question_bar_select_finish", [
         @style.border({ :border => "1px solid #49c0f0", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#49c0f0", "#49c0f0" ] } }),
-        [ "width: 80%; height: 90%; margin: 10px 0" ],
+        [ "height: 100%" ],
       ]),
-      stylesheet( ".question_button_selected_finish", [
+      stylesheet( ".question_bar_selected_finish", [
         @style.border({ :border => "1px solid #00cc66", :radius => "3px" }),
         @style.background({ :linear_gradient => { :color => [ "#00cc66", "#00cc66" ] } }),
-        [ "width: 80%; height: 90%; margin: 10px 0" ],
+        [ "height: 100%" ],
       ]),
     ]
     
